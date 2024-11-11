@@ -4,8 +4,8 @@ Database module
 
 from typing import Generator
 
-from src.api.database.session import get_local_session, SQLALCHEMY_DATABASE_URL
-from src.api.log import get_logger
+from src.database.session import get_local_session, SQLALCHEMY_DATABASE_URL
+from src.log import get_logger
 
 log = get_logger(__name__)
 

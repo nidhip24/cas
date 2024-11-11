@@ -1,0 +1,4 @@
+source venv/bin/activate
+pytest src/tests/ -s -vv --tb=line
+
+fastapi dev src/main.py

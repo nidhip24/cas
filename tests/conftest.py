@@ -6,13 +6,13 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from src.api.log import get_logger
+from src.log import get_logger
 
 log = get_logger(__name__)
 
-# from src.api.schemas.auth import UserRegister
-# from src.api.database.db import get_db
-# from src.api.models import user_data as UserData
+# from src.schemas.auth import UserRegister
+# from src.database.db import get_db
+# from src.models import user_data as UserData
 
 log = get_logger()
 

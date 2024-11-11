@@ -8,11 +8,11 @@ from unittest.mock import patch
 import pytest
 from sqlalchemy.orm import Session
 
-# from src.api.database.db import get_db
+# from src.database.db import get_db
 from src.tests.conftest import override_get_db
 
 
-@patch("src.api.database.db.get_db", return_value=override_get_db())
+@patch("src.database.db.get_db", return_value=override_get_db())
 def test_get_db(mock_get_db):
     """
     testing get_db function

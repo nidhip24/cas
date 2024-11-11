@@ -6,6 +6,26 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker
 
+from src.config import Settings, settings
+
+
+def build_sqlalchemy_database_url_from_settings(_settings: Settings) -> str:
+    """
+    Builds a SQLAlchemy URL based on the provided settings.
+
+    Parameters:
+        _settings (Settings): An instance of the Settings class
+        containing the PostgreSQL connection details.
+
+    Returns:
+        str: The generated SQLAlchemy URL.
+    """
+    return (
+        f"mysql+mysqlconnector://{_settings.MYSQL_USER}:"
+        f"{_settings.MYSQL_PASSWORD}@{_settings.MYSQL_HOST}:"
+        f"{_settings.MYSQL_PORT}/{_settings.MYSQL_DB}"
+    )
+
 
 def get_engine(database_url: str, echo=False) -> Engine:
     """
@@ -45,4 +65,4 @@ def get_local_session(database_url: str, echo=False) -> sessionmaker:
     return session
 
 
-SQLALCHEMY_DATABASE_URL = "mysql+mysqlconnector://root:@localhost:3306/CAS"
+SQLALCHEMY_DATABASE_URL = build_sqlalchemy_database_url_from_settings(settings)

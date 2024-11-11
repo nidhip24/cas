@@ -2,3 +2,4 @@ pytest
 fastapi
 configparser
 SQLAlchemy
+pydantic-settings

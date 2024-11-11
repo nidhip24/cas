@@ -8,10 +8,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from src.api.schemas.auth import (UserRegister, Token)
-from src.api.database.db import get_db
-from src.api.models import user_data as UserData
-from src.security import (get_password_hash, create_access_token, verify_password)
+from src.schemas.auth import (UserRegister, Token)
+from src.database.db import get_db
+from src.models import user_data as UserData
+from src.security import (
+    get_password_hash, create_access_token, verify_password
+)
+from src.config import settings
 
 
 router = APIRouter()
@@ -93,7 +96,9 @@ def login_for_access_token(
             detail="Incorrect email or password",
         )
 
-    access_token_expires = timedelta(minutes=10)
+    access_token_expires = timedelta(
+        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    )
     access_token = create_access_token(
         subject=user.id, expires_delta=access_token_expires
     )
