@@ -1,0 +1,4 @@
+pytest
+fastapi
+configparser
+SQLAlchemy
