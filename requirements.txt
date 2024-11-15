@@ -8,3 +8,5 @@ passlib
 mysql-connector-python
 httpx
 pytest-cov
+python-multipart
+pydantic[email]
