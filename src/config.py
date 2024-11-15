@@ -41,6 +41,9 @@ class Settings(BaseSettings):
 
 
 class ContainerDevSettings(Settings):
+    """
+    Container development settings.
+    """
     model_config = SettingsConfigDict(
         env_file="./.env.dev", env_file_encoding="utf-8", case_sensitive=True
     )
