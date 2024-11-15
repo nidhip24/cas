@@ -30,6 +30,9 @@ jobs:
         pip install pytest-cov
         pip install pydantic[email]
 
+    - name: Set environment to test
+      run: echo "ENV=test" >> $GITHUB_ENV
+
     - name: Run tests with coverage
       run: pytest --cov=src tests/
 
