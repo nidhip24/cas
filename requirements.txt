@@ -6,3 +6,5 @@ pydantic-settings
 jose
 passlib
 mysql-connector-python
+httpx
+pytest-cov
