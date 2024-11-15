@@ -1,0 +1,11 @@
+language: python
+python:
+  - "3.13"
+
+# Install dependencies
+install:
+  - pip install -r requirements.txt
+
+# Run tests
+script:
+  - pytest tests/ -s -vv --tb=line
