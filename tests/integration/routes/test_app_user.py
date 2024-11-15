@@ -1,12 +1,14 @@
 """
 Test for the user routes
 """
+from uuid import uuid4
 
 LOGIN_HEADERS = headers = {
     "accept": "application/json",
     "Content-Type": "application/x-www-form-urlencoded"
 }
 
+UNIQUE_USERNAME = f"nidhip{uuid4().hex[:6]}@gmail.com"
 
 def test_register_duplicate_email(test_client):
     """
@@ -30,7 +32,7 @@ def test_register(test_client):
     """
     response = test_client.post(
         "/v1/api/user/register",
-        json={"username": "nidhip4@gmail.com", "password": "admin123"}
+        json={"username": UNIQUE_USERNAME, "password": "admin123"}
     )
     data = response.json()
     assert (
@@ -48,7 +50,7 @@ def test_can_login_for_access_token(test_client):
     response = test_client.post(
         "/v1/api/user/login",
         headers=LOGIN_HEADERS,
-        data={"username": "nidhip@gmail.com", "password": "admin"}
+        data={"username": UNIQUE_USERNAME, "password": "admin123"}
     )
     data = response.json()
     assert (

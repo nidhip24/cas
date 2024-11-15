@@ -9,7 +9,7 @@ import pytest
 from sqlalchemy.orm import Session
 
 # from src.database.db import get_db
-from src.tests.conftest import override_get_db
+from tests.conftest import override_get_db
 
 
 @patch("src.database.db.get_db", return_value=override_get_db())
