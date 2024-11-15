@@ -10,21 +10,6 @@ LOGIN_HEADERS = headers = {
 
 UNIQUE_USERNAME = f"nidhip{uuid4().hex[:6]}@gmail.com"
 
-def test_register_duplicate_email(test_client):
-    """
-    Test for registering a user with a duplicate email
-    """
-    response = test_client.post(
-        "/v1/api/user/register",
-        json={
-            "username": "nidhip@gmail.com",
-            "password": "admin123"
-        }
-    )
-    assert (
-        response.status_code == 409
-    )
-
 
 def test_register(test_client):
     """
@@ -39,6 +24,22 @@ def test_register(test_client):
         "message" in data
         and data["message"] == "User created successfully"
         and response.status_code == 201
+    )
+
+
+def test_register_duplicate_email(test_client):
+    """
+    Test for registering a user with a duplicate email
+    """
+    response = test_client.post(
+        "/v1/api/user/register",
+        json={
+            "username": UNIQUE_USERNAME,
+            "password": "admin123"
+        }
+    )
+    assert (
+        response.status_code == 409
     )
 
 
