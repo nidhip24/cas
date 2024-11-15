@@ -3,7 +3,7 @@ fastapi
 configparser
 SQLAlchemy
 pydantic-settings
-jose
+python-jose
 passlib
 mysql-connector-python
 httpx
