@@ -14,6 +14,6 @@ class AuthTrail(Base):
 
     __tablename__ = 'auth_trail'
 
-    aid = Column(Integer, ForeignKey('app.id'), primary_key=True)
-    auid = Column(Integer, ForeignKey('auth_user.id'), primary_key=True)
+    aid = Column(Integer, primary_key=True)
+    auid = Column(Integer, primary_key=True)
     timestamp = Column(TIMESTAMP, server_default=func.current_timestamp())

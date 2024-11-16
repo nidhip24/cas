@@ -15,7 +15,7 @@ class AppConfig(Base):
     __tablename__ = 'app_config'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    aid = Column(Integer, ForeignKey('app.id'), nullable=False)
+    aid = Column(Integer, nullable=False)
     metadata_ = Column("metadata", Text, nullable=False)
     created_at = Column(TIMESTAMP, server_default=func.current_timestamp())
     updated_at = Column(

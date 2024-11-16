@@ -15,8 +15,8 @@ class App(Base):
     __tablename__ = 'app'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    uid = Column(Integer, ForeignKey('user_data.id'), nullable=False)
-    amid = Column(Integer, ForeignKey('auth_method.id'), nullable=False)
+    uid = Column(Integer, nullable=False)
+    amid = Column(Integer, nullable=False)
     name = Column(String(255), nullable=False)
     client_id = Column(Text, nullable=False)
     secret = Column(Text, nullable=False)
