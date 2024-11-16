@@ -40,6 +40,27 @@ def create_access_token(
     return encoded_jwt
 
 
+def verify_token(token: str) -> dict:
+    """
+    Verify the access token.
+
+    Parameters:
+        token (str): The access token to verify.
+
+    Returns:
+        dict: The payload of the access token.
+    """
+    try:
+        payload = jwt.decode(
+            token, settings.SECRET_KEY,
+            algorithms=[settings.ALGORITHM]
+        )
+        print(payload)
+        return payload
+    except jwt.JWTError:
+        return None
+
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Verify if a plain password matches a hashed password.

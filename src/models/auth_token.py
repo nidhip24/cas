@@ -15,7 +15,7 @@ class AuthToken(Base):
     __tablename__ = 'auth_token'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    auid = Column(Integer, ForeignKey('auth_user.id'), nullable=False)
+    auid = Column(Integer, nullable=False)
     token = Column(Text, nullable=False)
     expiry = Column(TIMESTAMP, nullable=False)
     created_at = Column(TIMESTAMP, server_default=func.current_timestamp())

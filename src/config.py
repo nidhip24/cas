@@ -6,6 +6,7 @@ import os
 from pydantic import EmailStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
 from src.log import get_logger
 
 log = get_logger(__name__)
@@ -38,6 +39,9 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_USERNAME: str
     FIRST_SUPERUSER_EMAIL: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
+
+    # PROTECTED_PATHS: List[str] = []
+    PROTECTED_PATHS: str
 
 
 class ContainerDevSettings(Settings):

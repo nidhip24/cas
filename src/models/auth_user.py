@@ -17,8 +17,8 @@ class AuthUser(Base):
     __tablename__ = 'auth_user'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    aid = Column(Integer, ForeignKey('app.id'), nullable=False)
-    amid = Column(Integer, ForeignKey('auth_method.id'), nullable=False)
+    aid = Column(Integer, nullable=False)
+    amid = Column(Integer, nullable=False)
     username = Column(String(255), nullable=False)
     password = Column(Text, default=None)
     is_blocked = Column(Boolean, default=False)
