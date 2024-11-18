@@ -59,15 +59,18 @@ jobs:
       # Step 7: Deploy the Docker image to the remote server
       - name: Deploy to Remote Server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.API_SERVER_USER }}@${{ secrets.API_SERVER }} << 'EOF'
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+          chmod 600 private_key
+          ssh -i private_key -o StrictHostKeyChecking=no ${{ secrets.API_SERVER_USER }}@${{ secrets.API_SERVER }} << 'EOF'
             docker pull nidhip24/cas:latest
             docker stop cas_app || true
             docker rm cas_app || true
             docker run -d \
               --name cas_app \
               -p 8000:8000 \
-              --env-file .env.prod \
+              --env-file /path/to/.env.prod \
               nidhip24/cas:latest
           EOF
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          API_SERVER_USER: ${{ secrets.API_SERVER_USER }}
+          API_SERVER: ${{ secrets.API_SERVER }}
