@@ -61,7 +61,10 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
           chmod 600 private_key
-          ssh -i private_key -o StrictHostKeyChecking=no root@116.203.103.193 << 'EOF'
+          
+          ssh-keyscan -H ${{ secrets.API_SERVER }} >> ~/.ssh/known_hosts
+
+          ssh -vvv -i private_key -o StrictHostKeyChecking=no root@116.203.103.193 << 'EOF'
             docker pull nidhip24/cas:latest
             docker stop cas_app || true
             docker rm cas_app || true
