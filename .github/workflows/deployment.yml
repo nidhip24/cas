@@ -59,7 +59,7 @@ jobs:
       # Step 7: Deploy the Docker image to the remote server
       - name: Deploy to Remote Server
         run: |
-          ssh -o StrictHostKeyChecking=no user@your-server-ip << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.API_SERVER_USER }}@${{ secrets.API_SERVER }} << 'EOF'
             docker pull nidhip24/cas:latest
             docker stop cas_app || true
             docker rm cas_app || true
