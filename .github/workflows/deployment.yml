@@ -62,7 +62,8 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
           chmod 600 private_key
 
-          mkdir .ssh/known_hosts
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
           ssh-keyscan -H ${{ secrets.API_SERVER }} >> ~/.ssh/known_hosts
 
           ssh -vvv -i private_key -o StrictHostKeyChecking=no root@116.203.103.193 << 'EOF'
