@@ -61,8 +61,6 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
           chmod 600 private_key
-          
-          ssh-keyscan -H ${{ secrets.API_SERVER }} >> ~/.ssh/known_hosts
 
           ssh -vvv -i private_key -o StrictHostKeyChecking=no root@116.203.103.193 << 'EOF'
             docker pull nidhip24/cas:latest
