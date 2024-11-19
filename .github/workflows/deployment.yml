@@ -21,61 +21,33 @@ jobs:
       # Step 3: Build the Docker image
       - name: Build Docker Image
         run: |
-          docker build -t nidhip24/cas:latest .
+          docker build -platform linux/amd64,linux/arm64 -t nidhip24/cas:latest .
 
-      # Step 4: Create .env.prod file
-      - name: Create .env.prod
+      # Step 4: Create .env.test file
+      - name: Create .env.test
         run: |
-          echo "PROJECT_NAME=${{ secrets.PROJECT_NAME }}" >> .env.prod
-          echo "API_VERSION=${{ secrets.API_VERSION }}" >> .env.prod
-          echo "ENV=${{ secrets.ENV }}" >> .env.prod
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env.prod
-          echo "ALGORITHM=${{ secrets.ALGORITHM }}" >> .env.prod
+          echo "PROJECT_NAME=${{ secrets.PROJECT_NAME }}" >> .env.test
+          echo "API_VERSION=${{ secrets.API_VERSION }}" >> .env.test
+          echo "ENV=${{ secrets.ENV }}" >> .env.test
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env.test
+          echo "ALGORITHM=${{ secrets.ALGORITHM }}" >> .env.test
 
-          echo "ACCESS_TOKEN_EXPIRE_MINUTES=${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}" >> .env.prod
-          echo "FIRST_SUPERUSER_USERNAME=${{ secrets.FIRST_SUPERUSER_USERNAME }}" >> .env.prod
-          echo "FIRST_SUPERUSER_EMAIL=${{ secrets.FIRST_SUPERUSER_EMAIL }}" >> .env.prod
-          echo "FIRST_SUPERUSER_PASSWORD=${{ secrets.FIRST_SUPERUSER_PASSWORD }}" >> .env.prod
+          echo "ACCESS_TOKEN_EXPIRE_MINUTES=${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}" >> .env.test
+          echo "FIRST_SUPERUSER_USERNAME=${{ secrets.FIRST_SUPERUSER_USERNAME }}" >> .env.test
+          echo "FIRST_SUPERUSER_EMAIL=${{ secrets.FIRST_SUPERUSER_EMAIL }}" >> .env.test
+          echo "FIRST_SUPERUSER_PASSWORD=${{ secrets.FIRST_SUPERUSER_PASSWORD }}" >> .env.test
           
-          echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env.prod
-          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env.prod
-          echo "MYSQL_DB=${{ secrets.MYSQL_DB }}" >> .env.prod
-          echo "MYSQL_PORT=${{ secrets.MYSQL_PORT }}" >> .env.prod
-          echo "MYSQL_HOST=${{ secrets.MYSQL_HOST }}" >> .env.prod
+          echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env.test
+          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env.test
+          echo "MYSQL_DB=${{ secrets.MYSQL_DB }}" >> .env.test
+          echo "MYSQL_PORT=${{ secrets.MYSQL_PORT }}" >> .env.test
+          echo "MYSQL_HOST=${{ secrets.MYSQL_HOST }}" >> .env.test
 
-          echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> .env.prod
-          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> .env.prod
+          echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> .env.test
+          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> .env.test
 
-          echo "PROTECTED_PATHS=${{ secrets.PROTECTED_PATHS }}" >> .env.prod
+          echo "PROTECTED_PATHS=${{ secrets.PROTECTED_PATHS }}" >> .env.test
 
       # Step 5: Push the Docker image to Docker Hub
       - name: Push Docker Image
         run: docker push nidhip24/cas:latest
-
-      # Step 6: Pull the latest Docker image
-      - name: Pull the Latest Image
-        run: docker pull nidhip24/cas:latest
-
-      # Step 7: Deploy the Docker image to the remote server
-      - name: Deploy to Remote Server
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
-          chmod 600 private_key
-
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          ssh-keyscan -H ${{ secrets.API_SERVER }} >> ~/.ssh/known_hosts
-
-          ssh -vvv -i private_key -o StrictHostKeyChecking=no root@116.203.103.193 << 'EOF'
-            docker pull nidhip24/cas:latest
-            docker stop cas_app || true
-            docker rm cas_app || true
-            docker run -d \
-              --name cas_app \
-              -p 8000:8000 \
-              --env-file /path/to/.env.prod \
-              nidhip24/cas:latest
-          EOF
-        env:
-          API_SERVER_USER: ${{ secrets.API_SERVER_USER }}
-          API_SERVER: ${{ secrets.API_SERVER }}
