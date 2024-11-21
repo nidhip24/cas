@@ -18,12 +18,7 @@ jobs:
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      # Step 3: Build the Docker image
-      - name: Build Docker Image
-        run: |
-          docker build -t nidhip24/cas:latest .
-
-      # Step 4: Create .env.test file
+      # Step 3: Create .env.test file
       - name: Create .env.test
         run: |
           echo "PROJECT_NAME=${{ secrets.PROJECT_NAME }}" >> .env.test
@@ -47,6 +42,11 @@ jobs:
           echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> .env.test
 
           echo "PROTECTED_PATHS=${{ secrets.PROTECTED_PATHS }}" >> .env.test
+
+      # Step 4: Build the Docker image
+      - name: Build Docker Image
+        run: |
+          docker build -t nidhip24/cas:latest .
 
       # Step 5: Push the Docker image to Docker Hub
       - name: Push Docker Image
