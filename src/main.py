@@ -4,6 +4,7 @@ Main module of the server file
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 
 from src.middleware import AuthMiddleware
@@ -12,6 +13,7 @@ from src.api.routes.app import router as application
 from src.api.routes.app_user import router as app_user
 
 app = FastAPI(title="CAS API", version="1.0.0")
+origins = ["*"]
 
 
 # Custom error handler for validation errors
@@ -37,6 +39,13 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 # Add the middleware to the app
 app.add_middleware(AuthMiddleware)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(user, prefix="/v1/api/user", tags=["users"])
 app.include_router(application, prefix="/v1/api/app", tags=["apps"])
