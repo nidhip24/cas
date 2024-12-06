@@ -22,8 +22,8 @@
             down-flags: "--volumes"  # Clean up volumes after tests
             test-container: "app"  # The service name in the docker-compose file
             test-command: |
-              alembic downgrade base &&
-              alembic upgrade head &&
+              alembic downgrade base 
+              alembic upgrade head 
               pytest tests/ -s -vv --tb=line  # Command to run migrations and tests
           env:
             MYSQL_USER: cas_user
