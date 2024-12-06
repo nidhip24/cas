@@ -14,3 +14,5 @@ docker run --platform linux/amd64 -d --name cas_app   -p 8000:8000 --env-file /r
 
 
 docker buildx build --platform linux/amd64 -t nidhip24/cas:latest .
+
+docker run --platform linux/amd64 -d --name cas_app   -p 8000:8000 -p 3306:3306   --env-file /root/cas/.env.test   nidhip24/cas:latest

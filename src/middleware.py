@@ -25,6 +25,9 @@ class AuthMiddleware(BaseHTTPMiddleware):
         )
 
     async def dispatch(self, request: Request, call_next):
+        """
+        Handle the request and check if the user is authenticated.
+        """
         # Check if the URL is in the protected paths
         if any(
             request.url.path.startswith(path) for path in self.protected_paths
