@@ -25,15 +25,15 @@ jobs:
 
       # Step 3: Downgrade database to base
       - name: Downgrade database
-        run: docker-compose exec app alembic downgrade base
+        run: docker-compose exec -T app alembic downgrade base
 
       # Step 4: Upgrade database to head
       - name: Upgrade database
-        run: docker-compose exec app alembic upgrade head
+        run: docker-compose exec -T app alembic upgrade head
 
       # Step 5: Run tests
       - name: Run tests
-        run: docker-compose exec app pytest tests/ -s -vv --tb=line
+        run: docker-compose exec -T app pytest tests/ -s -vv --tb=line
 
       # Step 6: Tear down services
       - name: Tear down services
