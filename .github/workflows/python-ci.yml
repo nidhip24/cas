@@ -24,9 +24,9 @@ jobs:
         run: docker-compose up --build -d
 
       # Step 3: Wait for database readiness
-      - name: Wait for MySQL to be ready
-        run: |
-          docker-compose exec -T app sh -c "./wait-for-db.sh"
+      # - name: Wait for MySQL to be ready
+      #   run: |
+      #     docker-compose exec -T app sh -c "./wait-for-db.sh"
 
       # Step 4: Upgrade database to head
       - name: Upgrade database
