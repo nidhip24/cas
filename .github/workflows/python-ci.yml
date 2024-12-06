@@ -35,14 +35,6 @@ jobs:
       - name: Logs from cas_db
         run: docker logs cas_db
 
-      - name: Wait for MySQL to initialize
-        run: sleep 15 # Adding a delay
-
-      # Step 3: Wait for database readiness
-      # - name: Wait for MySQL to be ready
-      #   run: |
-      #     docker-compose exec -T app sh -c "./wait-for-db.sh"
-
       # Step 4: Upgrade database to head
       - name: Upgrade database
         run: docker exec cas_app alembic upgrade head
