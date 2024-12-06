@@ -23,9 +23,10 @@ jobs:
       - name: Build and start services
         run: docker-compose up --build -d
 
-      # Step 3: Downgrade database to base
-      - name: Downgrade database
-        run: docker-compose exec -T app alembic downgrade base
+      # Step 3: Wait for database readiness
+      - name: Wait for MySQL to be ready
+        run: |
+          docker-compose exec -T app sh -c "./wait-for-db.sh"
 
       # Step 4: Upgrade database to head
       - name: Upgrade database
