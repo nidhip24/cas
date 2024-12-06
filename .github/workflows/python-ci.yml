@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   test:
@@ -21,7 +18,7 @@ jobs:
       - name: Run tests using Docker Compose
         uses: adambirds/docker-compose-action@v1.3.0
         with:
-          compose-file: "docker-compose.yml"
+          compose-file: "docker-compose.yaml"
           down-flags: "--volumes"  # Clean up volumes after tests
           test-container: "cas_app"  # The service name in the docker-compose file
           test-command: "pytest tests/ -s -vv --tb=line"  # Command to run the tests
@@ -31,3 +28,4 @@ jobs:
           MYSQL_DATABASE: cas_db
           MYSQL_HOST: db
           MYSQL_PORT: 3306
+          ENV: "test"
