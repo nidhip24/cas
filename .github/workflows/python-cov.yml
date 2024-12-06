@@ -1,43 +1,48 @@
-name: Code Coverage
+name: CI Coverage
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   coverage:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        python-version: [3.13]
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pytest-cov
-        pip install pydantic[email]
+      # Step 2: Build and start services
+      - name: Build and start services
+        run: docker-compose up --build -d
 
-    - name: Set environment to test
-      run: echo "ENV=test" >> $GITHUB_ENV
+      - name: List running containers
+        run: docker ps
 
-    - name: Run tests with coverage
-      run: pytest --cov=src tests/
+      - name: Wait for MySQL to initialize
+        run: sleep 15 # Adding a delay
 
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v3
-      with:
-        name: coverage-report
-        path: htmlcov/
+      - name: Logs from cas_app
+        run: docker logs cas_app
+
+      - name: Logs from cas_db
+        run: docker logs cas_db
+
+      # Step 4: Upgrade database to head
+      - name: Upgrade database
+        run: docker exec cas_app alembic upgrade head
+
+      # Step 5: Run tests
+      - name: Run tests
+        run: docker exec cas_app pytest --cov=src tests/
+
+      # Step 6: Tear down services
+      - name: Tear down services
+        run: docker-compose down --volumes
