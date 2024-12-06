@@ -11,6 +11,22 @@ LOGIN_HEADERS = headers = {
 UNIQUE_USERNAME = f"nidhip{uuid4().hex[:6]}@gmail.com"
 
 
+def test_register_test_user(test_client):
+    """
+    Test for registering a user
+    """
+    response = test_client.post(
+        "/v1/api/user/register",
+        json={"username": "admin@gmail.com", "password": "admin"}
+    )
+    data = response.json()
+    assert (
+        "message" in data
+        and data["message"] == "User created successfully"
+        and response.status_code == 201
+    )
+
+
 def test_register(test_client):
     """
     Test for registering a user
@@ -68,7 +84,7 @@ def test_cant_login_for_wrong_password(test_client):
     response = test_client.post(
         "/v1/api/user/login",
         headers=LOGIN_HEADERS,
-        data={"username": "nidhip@gmail.com", "password": "wrong"}
+        data={"username": UNIQUE_USERNAME, "password": "wrong"}
     )
     assert (
         response.status_code == 401
