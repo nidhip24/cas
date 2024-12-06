@@ -1,21 +1,7 @@
 
-# FastAPI Application
+# **CAS Application**
 
-![FastAPI](https://img.shields.io/badge/FastAPI-Framework-green?style=flat&logo=fastapi)
-
-A powerful and scalable RESTful API built using [FastAPI](https://fastapi.tiangolo.com/). This application is designed for high performance and includes features such as user authentication, CRUD operations, and modular architecture.
-
----
-
-## Table of Contents
-
-- [Features](#features)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
-- [License](#license)
+A containerized application that uses Docker and Docker Compose for easy deployment and management. The project includes database migrations using Alembic to manage schema changes effectively.
 
 ---
 
@@ -30,56 +16,130 @@ A powerful and scalable RESTful API built using [FastAPI](https://fastapi.tiango
 
 ---
 
-## Requirements
+## **Prerequisites**
 
-- Python 3.9+
-- PostgreSQL/MySQL (Optional for production database)
-- Git
-- Pipenv or Virtualenv (for environment management)
+Ensure the following tools are installed on your system before proceeding:
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- A terminal or command-line tool
+- [Postman](https://www.postman.com/) for API testing
 
 ---
 
-## Installation
+## **Getting Started**
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
-```
+Follow these steps to set up and run the application on your local machine.
 
-### 2. Create a Virtual Environment
-Using `pipenv`:
+### **1. Clone the Repository**
+
 ```bash
-pipenv install
-pipenv shell
-```
-Or using `virtualenv`:
-```bash
-python -m venv env
-source env/bin/activate  # For Linux/macOS
-env\Scripts\activate     # For Windows
-pip install -r requirements.txt
+git clone https://github.com/nidhip24/cas.git
+cd cas
 ```
 
-### 3. Configure Environment Variables
-Create a `.env` file in the root directory and add the necessary configurations:
-```env
-SECRET_KEY=your-secret-key
-DATABASE_URL=sqlite:///./test.db
-JWT_ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
+---
+
+### **2. Build the Docker Image (Optional)**
+
+Use `docker buildx` to create a cross-platform Docker image:
+
+```bash
+docker buildx build --platform linux/amd64 -t nidhip24/cas:latest .
 ```
 
-### 4. Run Database Migrations
-If you're using a database like MySQL:
+**Explanation**:
+- `--platform linux/amd64`: Ensures compatibility with AMD64 architecture.
+- `-t nidhip24/cas:latest`: Tags the image for easier reference.
+
+---
+
+### **3. Run the Application**
+
+Start the application and its dependencies (like the database) using Docker Compose:
+
 ```bash
-mysql -u <username> -p<PlainPassword> <databasename> < <filename.sql>
+docker compose up -d
 ```
 
-### 5. Start the Application
+**Explanation**:
+- `up`: Starts the services defined in `docker-compose.yaml`.
+- `-d`: Runs the services in detached mode (in the background).
+
+---
+
+### **4. Apply Database Migrations**
+
+Run Alembic migrations to set up the database schema:
+
 ```bash
-uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
+docker exec -it app alembic upgrade head
 ```
+
+**Explanation**:
+- `exec`: Executes a command inside the running container.
+- `-it`: Allows interaction with the container’s terminal.
+- `app`: Refers to the application container defined in `docker-compose.yaml`.
+- `alembic upgrade head`: Applies all database migrations to bring the schema up to date.
+
+---
+
+### **5. Access the Application**
+
+The application runs on port `8000` by default. Access it in your browser at:
+
+```
+http://localhost:8000
+```
+
+Refer to the project documentation for API endpoints and further details.
+
+---
+
+
+### **6. Run Tests and Generate Coverage Report**
+
+#### **Option 1: Simple Test Execution**
+Run tests with detailed output:
+
+```bash
+docker exec cas_app pytest tests/ -s -vv --tb=line
+```
+
+**Explanation**:
+- `pytest tests/`: Runs all test cases located in the `tests/` directory.
+- `-s`: Prevents output capturing, allowing logs to be displayed in real time.
+- `-vv`: Provides verbose test output.
+- `--tb=line`: Displays test tracebacks in a single line for clarity.
+
+#### **Option 2: Tests with Coverage**
+To execute tests and generate a coverage report, run the following command:
+
+```bash
+docker exec -it app pytest tests/ --cov=src --cov-report=term-missing
+```
+
+**Explanation**:
+- `pytest tests/`: Runs all test cases located in the `tests/` directory.
+- `--cov=src`: Measures code coverage for the `src/` directory.
+- `--cov-report=term-missing`: Displays uncovered lines in the terminal.
+
+View the test results and ensure all tests pass.
+
+
+---
+
+### **7. Tear Down the Application**
+
+To stop the application and clean up resources, use:
+
+```bash
+docker-compose down --volumes
+```
+
+**Explanation**:
+- `down`: Stops and removes all containers, networks, and services created by `docker-compose up`.
+- `--volumes`: Removes associated Docker volumes to ensure a clean environment.
 
 ---
 
@@ -91,47 +151,73 @@ uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
 
 ---
 
-## Deployment
+## **API Testing**
 
-### Deploy Locally
-Run the server locally:
+### **Postman Collection**
+For testing the APIs, you can use the provided Postman collection. Import the `CASV1.postman_collection.json` file into Postman.
+
+#### **Steps to Use Postman Collection**
+1. Open Postman.
+2. Click on **Import**.
+3. Select the `CASV1.postman_collection.json` file.
+4. Set the `{{server}}` variable to `http://localhost:8000`.
+5. Execute the predefined requests for operations like:
+   - User Registration
+   - Login
+   - App Creation
+   - Listing Apps
+   - App User Registration
+   - App User Login
+
+**Collection File**: [CASV1.postman_collection.json](CASV1.postman_collection.json)
+
+
+## **Workflow Summary**
+
+| **Command**                                | **Description**                           |
+|--------------------------------------------|-------------------------------------------|
+| `git clone https://github.com/nidhip24/cas.git` | Clone the repository.                     |
+| `cd cas`                                   | Navigate into the project directory.       |
+| `docker buildx build --platform linux/amd64 -t nidhip24/cas:latest .` | Build the Docker image(optional).                   |
+| `docker compose up -d`                     | Start the application and services.        |
+| `docker exec -it app alembic upgrade head` | Apply database migrations.                |
+| `http://localhost:8000`                    | Access the application in the browser.     |
+| `docker-compose down --volumes`            | Tear down the application and services.    |
+
+---
+
+## **Troubleshooting**
+
+### **1. Check Running Containers**
+Use the following command to ensure all containers are running:
 ```bash
-uvicorn app:app --host 0.0.0.0 --port 8000
+docker ps
 ```
 
-### Deploy to Production
-Use a production-grade server like Gunicorn with Uvicorn workers:
+### **2. Inspect Logs**
+If a service fails to start, view the logs for detailed error information:
 ```bash
-gunicorn -k uvicorn.workers.UvicornWorker app:app -b 0.0.0.0:8000
+docker logs <container_name>
 ```
 
-For reverse proxying, configure **NGINX** as described in [FastAPI Deployment Docs](https://fastapi.tiangolo.com/deployment/).
+### **3. Verify Database Readiness**
+Ensure the database is ready before applying migrations. Use this command to wait for the database:
+```bash
+docker exec -it app sh -c "while ! nc -z db 3306; do echo 'Waiting for database...'; sleep 2; done; echo 'Database is ready!'"
+```
 
 ---
 
-## Contributing
+## **License**
 
-Contributions are welcome! Please follow the steps below:
-
-1. Fork this repository.
-2. Create a new branch: `git checkout -b feature-name`.
-3. Commit your changes: `git commit -m "Add feature-name"`.
-4. Push to the branch: `git push origin feature-name`.
-5. Submit a pull request.
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-## License
+## **Contact**
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+For questions or feedback, feel free to reach out:
 
----
-
-## Contact
-
-For issues, questions, or feature requests, please open an issue or contact the maintainer:
-
+- **Name**: Nidhip Kathiriya
 - **Email**: nidhipkathiriya@gmail.com
 - **GitHub**: [nidhip24](https://github.com/nidhip24)
-
-Let me know if you need further assistance!
