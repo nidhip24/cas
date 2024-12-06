@@ -33,11 +33,11 @@ jobs:
 
       # Step 4: Upgrade database to head
       - name: Upgrade database
-        run: docker exec -it cas_app alembic upgrade head
+        run: docker exec -T cas_app alembic upgrade head
 
       # Step 5: Run tests
       - name: Run tests
-        run: docker exec -it cas_app pytest tests/ -s -vv --tb=line
+        run: docker exec -T cas_app pytest tests/ -s -vv --tb=line
 
       # Step 6: Tear down services
       - name: Tear down services
