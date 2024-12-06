@@ -26,6 +26,12 @@ jobs:
       - name: List running containers
         run: docker ps
 
+      - name: Logs from cas_app
+        run: docker logs cas_app
+
+      - name: Logs from cas_db
+        run: docker logs cas_db
+
       # Step 3: Wait for database readiness
       # - name: Wait for MySQL to be ready
       #   run: |
