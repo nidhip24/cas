@@ -25,4 +25,4 @@ RUN chmod +x /wait-for-db.sh
 EXPOSE 8000
 
 # Command to wait for the database and start the application
-CMD ["/bin/sh", "-c", "/wait-for-db.sh && uvicorn src.main:app --host 0.0.0.0 --port 8000"]
+CMD ["#!/bin/bash", "-c", "/wait-for-db.sh && uvicorn src.main:app --host 0.0.0.0 --port 8000"]
