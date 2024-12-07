@@ -73,7 +73,7 @@ docker compose up -d
 Run Alembic migrations to set up the database schema:
 
 ```bash
-docker exec -it app alembic upgrade head
+docker exec -it cas_app alembic upgrade head
 ```
 
 **Explanation**:
@@ -180,7 +180,7 @@ For testing the APIs, you can use the provided Postman collection. Import the `C
 | `cd cas`                                   | Navigate into the project directory.       |
 | `docker buildx build --platform linux/amd64 -t nidhip24/cas:latest .` | Build the Docker image(optional).                   |
 | `docker compose up -d`                     | Start the application and services.        |
-| `docker exec -it app alembic upgrade head` | Apply database migrations.                |
+| `docker exec -it cas_app alembic upgrade head` | Apply database migrations.                |
 | `http://localhost:8000`                    | Access the application in the browser.     |
 | `docker-compose down --volumes`            | Tear down the application and services.    |
 
