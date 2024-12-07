@@ -116,7 +116,7 @@ docker exec cas_app pytest tests/ -s -vv --tb=line
 To execute tests and generate a coverage report, run the following command:
 
 ```bash
-docker exec -it app pytest tests/ --cov=src --cov-report=term-missing
+docker exec -it cas_app pytest tests/ --cov=src --cov-report=term-missing
 ```
 
 **Explanation**:
@@ -203,7 +203,7 @@ docker logs <container_name>
 ### **3. Verify Database Readiness**
 Ensure the database is ready before applying migrations. Use this command to wait for the database:
 ```bash
-docker exec -it app sh -c "while ! nc -z db 3306; do echo 'Waiting for database...'; sleep 2; done; echo 'Database is ready!'"
+docker exec -it cas_app sh -c "while ! nc -z db 3306; do echo 'Waiting for database...'; sleep 2; done; echo 'Database is ready!'"
 ```
 
 ---
